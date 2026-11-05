@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CivicConnect | Online Complaint Portal</title>
+<style>
+:root{--navy:#12304a;--blue:#1769aa;--teal:#12a89d;--bg:#f3f7fb;--ink:#172b3a;--muted:#647789;--line:#dce6ee;--white:#fff;--orange:#f2a541}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(115deg,#102e49,#1769aa);color:white;padding:18px max(5vw,22px);display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:42px;height:42px;border-radius:13px;background:#ffffff20;display:grid;place-items:center;font-size:23px}.brand h1{font-size:20px;margin:0}.brand p{margin:3px 0 0;color:#d6e8f6;font-size:12px}
+nav{display:flex;gap:8px;flex-wrap:wrap}nav button{border:1px solid #ffffff55;background:transparent;color:white;border-radius:9px;padding:9px 14px;cursor:pointer;font-weight:600}nav button.active,nav button:hover{background:white;color:var(--navy)}
+.hero{padding:52px max(5vw,22px);background:linear-gradient(120deg,#e5f2fb,#f3f8fc);display:grid;grid-template-columns:1.5fr 1fr;gap:30px;align-items:center}.hero h2{font-size:clamp(30px,4vw,46px);line-height:1.1;margin:0 0 14px;color:var(--navy)}.hero p{font-size:16px;line-height:1.7;color:#52697b;max-width:650px}.hero-art{background:white;border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:0 12px 35px #173c5910}.hero-art .big{font-size:52px}.hero-art strong{display:block;color:var(--navy);font-size:18px;margin:10px 0}.hero-art span{color:var(--muted);font-size:13px}
+main{max-width:1180px;margin:30px auto;padding:0 22px 50px}.section{display:none}.section.active{display:block}.section-head{display:flex;justify-content:space-between;align-items:end;gap:15px;flex-wrap:wrap;margin-bottom:20px}.section-head h2{margin:0;color:var(--navy);font-size:25px}.section-head p{margin:6px 0 0;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}.stat,.panel,.form-card{background:white;border:1px solid var(--line);border-radius:15px;padding:18px;box-shadow:0 5px 18px #173c5907}.stat small{color:var(--muted);font-weight:600}.stat strong{display:block;font-size:29px;color:var(--navy);margin-top:8px}.stat .symbol{float:right;font-size:22px}
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.panel h3{margin:0 0 15px;color:var(--navy)}.category-list{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.category{padding:13px;border:1px solid var(--line);border-radius:12px;display:flex;gap:10px;align-items:center}.category b{display:block;font-size:13px}.category span{font-size:22px}
+form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}label{font-size:13px;font-weight:700;color:#3c5365}input,select,textarea{font:inherit;border:1px solid #cbd9e4;border-radius:9px;padding:11px 12px;background:#fff;color:var(--ink);outline:none}input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px #1769aa18}textarea{min-height:105px;resize:vertical}.hint{font-size:11px;color:var(--muted)}
+.btn{border:0;border-radius:9px;padding:11px 17px;font-weight:700;cursor:pointer;background:var(--blue);color:white}.btn:hover{filter:brightness(.94)}.btn.secondary{background:#e8f1f8;color:var(--navy)}.btn.teal{background:var(--teal)}.actions{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.notice{padding:13px 15px;border-radius:10px;background:#eaf7f5;color:#146b63;border:1px solid #c7ece7;font-size:13px;margin:15px 0;display:none}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}.toolbar input,.toolbar select{max-width:230px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:top}th{color:#587084;font-size:11px;text-transform:uppercase;letter-spacing:.05em;background:#f8fbfd}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:white}
+.status{display:inline-block;padding:5px 8px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}.Pending{background:#fff2d9;color:#95600c}.Processing{background:#e5f1ff;color:#205c9a}.Resolved{background:#e1f6ec;color:#18734b}.Rejected{background:#fde8e8;color:#a83b3b}
+.empty{text-align:center;padding:35px;color:var(--muted)}.track-result{margin-top:16px}.track-card{background:#f7fafc;border:1px solid var(--line);border-radius:12px;padding:16px}.track-card h3{margin:0 0 8px}.track-card p{margin:6px 0;color:var(--muted);font-size:13px}
+footer{background:#102e49;color:#d7e6f1;padding:25px max(5vw,22px);text-align:center;font-size:12px}footer strong{color:white}
+@media(max-width:800px){.hero{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}}
+@media(max-width:520px){form{grid-template-columns:1fr}.field.full{grid-column:auto}.stats{grid-template-columns:1fr 1fr}.hero{padding-top:35px;padding-bottom:35px}.category-list{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand"><div class="logo">🏙️</div><div><h1>CivicConnect</h1><p>Public Issue & Complaint Management Portal</p></div></div>
+ <nav>
+  <button class="active" data-tab="home">Home</button><button data-tab="register">Register Complaint</button><button data-tab="track">Track Complaint</button><button data-tab="admin">Admin Dashboard</button>
+ </nav>
+</header>
+<section class="hero">
+ <div><h2>Your neighbourhood.<br>Our shared responsibility.</h2><p>Report civic issues such as damaged roads, street light failures, water pipe leakage and blocked rainwater drains. Submit a complaint and follow its progress in one place.</p><div class="actions"><button class="btn" onclick="showTab('register')">Report an Issue</button><button class="btn secondary" onclick="showTab('track')">Track a Complaint</button></div></div>
+ <div class="hero-art"><div class="big">📍 💬 🛠️</div><strong>Make your voice count</strong><span>Submit a clear report. Get a reference number. Stay informed as the issue is reviewed.</span></div>
+</section>
+<main>
+<section id="home" class="section active">
+ <div class="section-head"><div><h2>Community overview</h2><p>A quick view of complaints submitted through this demo portal.</p></div></div>
+ <div class="stats">
+  <div class="stat"><span class="symbol">📨</span><small>Total complaints</small><strong id="totalCount">0</strong></div>
+  <div class="stat"><span class="symbol">⏳</span><small>Pending</small><strong id="pendingCount">0</strong></div>
+  <div class="stat"><span class="symbol">🔧</span><small>In progress</small><strong id="processingCount">0</strong></div>
+  <div class="stat"><span class="symbol">✅</span><small>Resolved</small><strong id="resolvedCount">0</strong></div>
+ </div>
+ <div class="grid">
+  <div class="panel"><h3>Issues you can report</h3><div class="category-list">
+   <div class="category"><span>💡</span><b>Street light problem</b></div><div class="category"><span>💧</span><b>Water pipe leakage</b></div>
+   <div class="category"><span>🌧️</span><b>Rainwater drainage</b></div><div class="category"><span>🛣️</span><b>Road damage / pothole</b></div>
+   <div class="category"><span>🗑️</span><b>Garbage / sanitation</b></div><div class="category"><span>📋</span><b>Other civic issue</b></div>
+  </div></div>
+  <div class="panel"><h3>How it works</h3><ol style="padding-left:20px;color:#5c7181;line-height:2;font-size:14px"><li>Fill in the complaint form.</li><li>Receive a unique complaint ID.</li><li>Use the ID to track progress.</li><li>Staff can update the complaint status.</li></ol></div>
+ </div>
+</section>
+<section id="register" class="section">
+ <div class="section-head"><div><h2>Register a complaint</h2><p>Provide accurate details so the responsible team can locate the issue.</p></div></div>
+ <div class="form-card">
+  <div id="successNotice" class="notice"></div>
+  <form id="complaintForm">
+   <div class="field"><label for="citizen">Your name *</label><input id="citizen" required maxlength="70" placeholder="Enter your full name"></div>
+   <div class="field"><label for="phone">Mobile number *</label><input id="phone" required inputmode="numeric" pattern="[0-9]{10}" maxlength="10" placeholder="10-digit mobile number"><span class="hint">Enter 10 digits without spaces.</span></div>
+   <div class="field"><label for="email">Email address</label><input id="email" type="email" placeholder="name@example.com"></div>
+   <div class="field"><label for="category">Complaint category *</label><select id="category" required><option value="">Select an issue</option><option>Street Light Problem</option><option>Water Pipe Leakage</option><option>Rainwater Drainage</option><option>Road Problem / Pothole</option><option>Garbage / Sanitation</option><option>Other Civic Issue</option></select></div>
+   <div class="field full"><label for="location">Issue location / address *</label><input id="location" required maxlength="180" placeholder="Street, area, landmark, ward"></div>
+   <div class="field full"><label for="description">Describe the problem *</label><textarea id="description" required maxlength="1000" placeholder="Explain what happened, when it started, and any safety concern..."></textarea></div>
+   <div class="field full"><label for="photo">Photo evidence (optional)</label><input id="photo" type="file" accept="image/*"><span class="hint">Demo only: the selected photo is not uploaded or stored.</span></div>
+   <div class="field full"><div class="actions"><button class="btn teal" type="submit">Submit Complaint</button><button class="btn secondary" type="reset">Clear Form</button></div></div>
+  </form>
+ </div>
+</section>
+<section id="track" class="section">
+ <div class="section-head"><div><h2>Track your complaint</h2><p>Enter the complaint reference number you received after submission.</p></div></div>
+ <div class="form-card"><div class="field"><label for="trackId">Complaint reference ID</label><input id="trackId" placeholder="Example: CC-20261105-1234"></div><div class="actions" style="margin-top:12px"><button class="btn" onclick="trackComplaint()">Find Complaint</button></div><div id="trackResult" class="track-result"></div></div>
+</section>
+<section id="admin" class="section">
+ <div class="section-head"><div><h2>Admin dashboard</h2><p>Demo controls for reviewing and updating submitted complaints.</p></div><span class="hint">No login is configured in this front-end demo.</span></div>
+ <div class="toolbar"><input id="adminSearch" placeholder="Search ID, name or location" oninput="renderAdmin()"><select id="statusFilter" onchange="renderAdmin()"><option value="">All statuses</option><option>Pending</option><option>Processing</option><option>Resolved</option><option>Rejected</option></select></div>
+ <div class="table-wrap"><table><thead><tr><th>Reference ID</th><th>Citizen / Category</th><th>Location</th><th>Date</th><th>Status</th><th>Update status</th></tr></thead><tbody id="adminRows"></tbody></table></div>
+</section>
+</main>
+<footer><strong>CivicConnect</strong> · Online Complaint Registration & Management System<br>Demo website for civic issue reporting. For emergencies, contact the appropriate local authority directly.</footer>
+<script>
+const KEY='civicconnect_complaints_v1';
+let complaints=JSON.parse(localStorage.getItem(KEY)||'[]');
+function save(){localStorage.setItem(KEY,JSON.stringify(complaints));refresh()}
+function showTab(id){document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===id));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='admin')renderAdmin()}
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+function makeId(){return 'CC-'+new Date().toISOString().slice(0,10).replaceAll('-','')+'-'+Math.floor(1000+Math.random()*9000)}
+document.getElementById('complaintForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ const c={id:makeId(),name:citizen.value.trim(),phone:phone.value.trim(),email:email.value.trim(),category:category.value,location:location.value.trim(),description:description.value.trim(),date:new Date().toLocaleDateString('en-IN'),status:'Pending'};
+ complaints.unshift(c);save();const n=document.getElementById('successNotice');n.style.display='block';n.innerHTML='Complaint submitted successfully. Your reference ID is <strong>'+c.id+'</strong>. Please save this ID to track the complaint.';e.target.reset();n.scrollIntoView({behavior:'smooth',block:'center'});
+});
+function trackComplaint(){const id=document.getElementById('trackId').value.trim().toUpperCase(),c=complaints.find(x=>x.id===id),el=document.getElementById('trackResult');if(!id){el.innerHTML='<p class="hint">Please enter a reference ID.</p>';return}if(!c){el.innerHTML='<div class="track-card"><strong>No complaint found.</strong><p>Check the reference ID and try again. This demo only contains complaints submitted in this browser.</p></div>';return}el.innerHTML=`<div class="track-card"><h3>${c.category} <span class="status ${c.status}">${c.status}</span></h3><p><b>Reference:</b> ${c.id}</p><p><b>Submitted by:</b> ${escapeHtml(c.name)}</p><p><b>Location:</b> ${escapeHtml(c.location)}</p><p><b>Date:</b> ${c.date}</p><p><b>Description:</b> ${escapeHtml(c.description)}</p></div>`}
+function renderAdmin(){const q=document.getElementById('adminSearch').value.toLowerCase(),f=document.getElementById('statusFilter').value;const list=complaints.filter(c=>(!f||c.status===f)&&[c.id,c.name,c.location,c.category].some(v=>v.toLowerCase().includes(q)));document.getElementById('adminRows').innerHTML=list.length?list.map(c=>`<tr><td><b>${c.id}</b></td><td>${escapeHtml(c.name)}<br><span class="hint">${escapeHtml(c.category)}</span></td><td>${escapeHtml(c.location)}</td><td>${c.date}</td><td><span class="status ${c.status}">${c.status}</span></td><td><select aria-label="Update status for ${c.id}" onchange="updateStatus('${c.id}',this.value)">${['Pending','Processing','Resolved','Rejected'].map(s=>`<option ${c.status===s?'selected':''}>${s}</option>`).join('')}</select></td></tr>`).join(''):'<tr><td colspan="6" class="empty">No complaints found.</td></tr>'}
+function updateStatus(id,status){const c=complaints.find(x=>x.id===id);if(c){c.status=status;save();renderAdmin()}}
+function refresh(){document.getElementById('totalCount').textContent=complaints.length;document.getElementById('pendingCount').textContent=complaints.filter(c=>c.status==='Pending').length;document.getElementById('processingCount').textContent=complaints.filter(c=>c.status==='Processing').length;document.getElementById('resolvedCount').textContent=complaints.filter(c=>c.status==='Resolved').length;renderAdmin()}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
+refresh();
+</script>
+</body>
+</html>
